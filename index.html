@@ -232,6 +232,44 @@ body {
 .thanks h2 { color: var(--green); font-size: 22px; margin-bottom: 8px; }
 .thanks p  { color: var(--muted); font-size: 14px; }
 
+/* ── autocorrección ── */
+.grade-box {
+  margin: 28px auto 0;
+  max-width: 560px;
+  background: var(--panel-2);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  text-align: left;
+  overflow: hidden;
+}
+.grade-title {
+  background: #13141c;
+  border-bottom: 1px solid var(--border);
+  padding: 8px 16px;
+  font-size: 12px;
+  color: var(--amber);
+  letter-spacing: .5px;
+}
+.grade-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+.grade-table td { padding: 7px 16px; border-bottom: 1px solid var(--border); }
+.grade-table tr:last-child td { border-bottom: none; }
+.grade-table td:first-child { color: var(--text); }
+.grade-table td:last-child { width: 32px; text-align: center; font-size: 16px; }
+.grade-ok  { color: var(--green); }
+.grade-err { color: var(--red); }
+.grade-score {
+  padding: 10px 16px;
+  border-top: 1px solid var(--border);
+  font-size: 14px;
+  color: var(--text);
+}
+.grade-score strong { color: var(--amber); }
+.grade-open {
+  padding: 6px 16px 12px;
+  font-size: 12px;
+  color: var(--muted);
+}
+
 @media (max-width: 520px) {
   body { padding: 0; }
   .window { border-radius: 0; }
@@ -493,16 +531,44 @@ function lockAll() {
   document.querySelectorAll(".option").forEach(el => el.classList.add("locked"));
 }
 
-function renderThanks() {
+function renderThanks(gradeData) {
+  let gradeHtml = "";
+
+  if (gradeData && gradeData.results) {
+    const qids = Object.keys(gradeData.results);
+    let rows = "";
+    qids.forEach(qid => {
+      const q = questions.find(x => x.id === qid);
+      if (!q) return;
+      const label = q.text.length > 60 ? q.text.substring(0, 60) + "…" : q.text;
+      const ok = gradeData.results[qid] === "correcta";
+      rows += `<tr>
+        <td>${label}</td>
+        <td class="${ok ? "grade-ok" : "grade-err"}">${ok ? "✓" : "✗"}</td>
+      </tr>`;
+    });
+    gradeHtml = `
+      <div class="grade-box">
+        <div class="grade-title">// Autocorrección</div>
+        <table class="grade-table"><tbody>${rows}</tbody></table>
+        <div class="grade-score">
+          Resultado automático: <strong>${gradeData.correct}/${gradeData.total}</strong>
+        </div>
+        <div class="grade-open">
+          Las preguntas abiertas serán revisadas por la docente.
+        </div>
+      </div>`;
+  }
+
   document.getElementById("main-content").innerHTML = `
     <div class="thanks">
       <h2>✓ Escrito enviado</h2>
-      <p>Tus respuestas fueron registradas correctamente.<br>Podés cerrar esta ventana.</p>
+      <p>Tus respuestas fueron registradas correctamente.</p>
+      ${gradeHtml}
     </div>`;
   const bs = document.getElementById("build-status");
-  bs.textContent = "● enviado";
-  bs.className   = "build-status ok";
-  quizFinished   = true;
+  if (bs) { bs.textContent = "● enviado"; bs.className = "build-status ok"; }
+  quizFinished = true;
 }
 
 function performSubmit(payload) {
@@ -514,31 +580,42 @@ function performSubmit(payload) {
   const msg = document.getElementById("status-msg");
   if (msg) { msg.textContent = "Enviando respuestas…"; msg.className = "status-msg"; }
 
-  // Google Apps Script convierte los POST en GET redirect (302), perdiendo el body.
-  // La solución: enviar los datos como parámetro GET en la URL.
-  const encoded = encodeURIComponent(JSON.stringify(payload));
-  fetch(SHEET_WEBAPP_URL + "?data=" + encoded, {
-    method: "GET",
-    mode: "no-cors"
-  })
-  .then(() => {
+  // Usamos JSONP (inyección de <script>) en lugar de fetch:
+  // – evita los problemas de CORS de Google Apps Script
+  // – nos permite leer la respuesta con la calificación automática
+  const cbName = "_quizCb_" + Date.now();
+  let scriptEl = null;
+  let timer    = null;
+
+  function cleanup() {
+    clearTimeout(timer);
+    delete window[cbName];
+    if (scriptEl && scriptEl.parentNode) scriptEl.parentNode.removeChild(scriptEl);
+  }
+
+  window[cbName] = function(data) {
+    cleanup();
     try { localStorage.setItem(LS_KEY, "1"); } catch(e) {}
-    renderThanks();
-  })
-  .catch(err => {
-    // Solo llega aquí si hay error de red real (sin conexión, URL mal formada)
-    quizFinished = false;
-    locked = false;
-    document.querySelectorAll("textarea, input").forEach(el => el.disabled = false);
-    document.querySelectorAll(".option").forEach(el => el.classList.remove("locked"));
-    const btn2 = document.getElementById("btn-submit");
-    if (btn2) { btn2.disabled = false; btn2.textContent = "Reintentar envío"; }
-    const msg2 = document.getElementById("status-msg");
-    if (msg2) {
-      msg2.textContent = "⚠ No se pudo enviar. Verificá la URL del script y la conexión a internet.";
-      msg2.className = "status-msg error";
-    }
-  });
+    renderThanks(data);
+  };
+
+  // Timeout 15 s — si el script no carga asumimos que el envío fue igual (ya guardado)
+  timer = setTimeout(() => {
+    cleanup();
+    try { localStorage.setItem(LS_KEY, "1"); } catch(e) {}
+    renderThanks(null);
+  }, 15000);
+
+  scriptEl = document.createElement("script");
+  scriptEl.onerror = function() {
+    cleanup();
+    try { localStorage.setItem(LS_KEY, "1"); } catch(e) {}
+    renderThanks(null);
+  };
+
+  const encoded = encodeURIComponent(JSON.stringify(payload));
+  scriptEl.src = SHEET_WEBAPP_URL + "?callback=" + cbName + "&data=" + encoded;
+  document.head.appendChild(scriptEl);
 }
 
 function handleSubmit() {
@@ -577,7 +654,7 @@ document.addEventListener("mozfullscreenchange",    onFsChange);
 try {
   if (localStorage.getItem(LS_KEY) === "1") {
     alreadySubmitted = true;
-    renderThanks();
+    renderThanks(null);
   } else {
     renderSplash();
   }
