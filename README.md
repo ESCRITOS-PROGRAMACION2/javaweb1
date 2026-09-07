@@ -105,6 +105,10 @@ La hoja se crea automáticamente con encabezados formateados la primera vez que 
 
 > **Tip:** con GitHub Pages el archivo queda en una URL fija que se puede reutilizar en futuros escritos cambiando solo las preguntas y las respuestas correctas en el script.
 
+### ⚠️ Aviso para el docente — dispositivos iOS (iPhone / iPad)
+
+El bloqueo de pantalla completa **no funciona en Safari de iOS**. Si se va a permitir el uso de celulares para rendir el escrito, conviene preguntar al inicio de la clase si algún estudiante tiene un iPhone o iPad, y prestarle mayor atención durante el examen, ya que el sistema no puede impedir que salga de la pantalla del examen en ese tipo de dispositivo.
+
 ---
 
 ## Personalización
