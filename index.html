@@ -255,7 +255,6 @@ body {
 <script>
 // ⚠ REEMPLAZÁ esta URL por la tuya: Implementar → Administrar implementaciones → URL de App web
 const SHEET_WEBAPP_URL = "https://script.google.com/macros/s/AKfycbyvMoAslMId9-Zaa-UVHue-ALHLyY8YLhP2-r6GivSZsZuwq4SfihWdz389bh3RGmxr/exec";
-                          
 const LS_KEY = "servletsJspSubmitted";
 
 /* ─── PREGUNTAS ─────────────────────────────────────────────────────────── */
@@ -515,16 +514,14 @@ function performSubmit(payload) {
   const msg = document.getElementById("status-msg");
   if (msg) { msg.textContent = "Enviando respuestas…"; msg.className = "status-msg"; }
 
-  // mode:"no-cors" es necesario cuando el archivo se abre localmente (file://)
-  // La respuesta será opaca pero el request SÍ llega al servidor de Google
-  fetch(SHEET_WEBAPP_URL, {
-    method: "POST",
-    mode: "no-cors",
-    headers: { "Content-Type": "text/plain" },
-    body: JSON.stringify(payload)
+  // Google Apps Script convierte los POST en GET redirect (302), perdiendo el body.
+  // La solución: enviar los datos como parámetro GET en la URL.
+  const encoded = encodeURIComponent(JSON.stringify(payload));
+  fetch(SHEET_WEBAPP_URL + "?data=" + encoded, {
+    method: "GET",
+    mode: "no-cors"
   })
   .then(() => {
-    // Con no-cors el .then() se ejecuta cuando el request fue enviado
     try { localStorage.setItem(LS_KEY, "1"); } catch(e) {}
     renderThanks();
   })
