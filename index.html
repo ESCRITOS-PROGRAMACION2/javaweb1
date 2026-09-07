@@ -10,7 +10,6 @@
   --bg: #16171f; --panel: #1d1f2b; --panel-2: #23253383; --border: #2d2f42;
   --text: #d7d9e8; --muted: #6f7390; --amber: #ffb454; --amber-dim: #ffb45433;
   --green: #7ee787; --green-dim: #7ee78722; --red: #ff7b72; --red-dim: #ff7b7222;
-  --blue: #7dd3fc;
   --mono: ui-monospace, "Cascadia Code", "SF Mono", Consolas, "Fira Code", monospace;
 }
 
@@ -26,6 +25,7 @@ body {
   padding: 24px 16px 48px;
 }
 
+/* ── ventana ── */
 .window {
   max-width: 780px;
   margin: 0 auto;
@@ -44,75 +44,78 @@ body {
   padding: 10px 16px;
   user-select: none;
 }
-
 .dot { width: 12px; height: 12px; border-radius: 50%; }
-.dot.red   { background: #ff5f57; }
-.dot.yellow{ background: #febc2e; }
-.dot.green { background: #28c840; }
+.dot.red    { background: #ff5f57; }
+.dot.yellow { background: #febc2e; }
+.dot.green  { background: #28c840; }
+.tab-title  { margin-left: 10px; font-size: 13px; color: var(--muted); flex: 1; }
+.build-status           { font-size: 12px; color: var(--muted); }
+.build-status.ok        { color: var(--green); }
 
-.tab-title {
-  margin-left: 10px;
-  font-size: 13px;
-  color: var(--muted);
-  flex: 1;
-}
+.content { padding: 24px 28px 32px; }
 
-.build-status {
-  font-size: 12px;
-  color: var(--muted);
-}
-.build-status.ok  { color: var(--green); }
-.build-status.fail{ color: var(--red); }
-
-.content {
-  padding: 24px 28px 32px;
-}
-
-.quiz-header {
-  margin-bottom: 28px;
-}
-
-.quiz-header h1 {
-  font-size: 18px;
-  font-weight: 600;
-  color: var(--amber);
-  margin-bottom: 4px;
-}
-
-.quiz-header p {
-  color: var(--muted);
-  font-size: 13px;
-}
-
-.name-row {
+/* ── splash ── */
+.splash {
   display: flex;
+  flex-direction: column;
   align-items: center;
-  gap: 10px;
-  margin-bottom: 28px;
-  flex-wrap: wrap;
+  text-align: center;
+  padding: 40px 20px 44px;
+  gap: 20px;
 }
-
-.name-row label {
+.splash h1 {
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--amber);
+  letter-spacing: .02em;
+}
+.splash p {
   color: var(--muted);
-  font-size: 13px;
-  white-space: nowrap;
+  font-size: 13.5px;
+  max-width: 480px;
+  line-height: 1.65;
 }
-
-.name-row input {
-  flex: 1;
-  min-width: 200px;
-  background: var(--panel-2);
+.splash input[type="text"] {
+  width: 100%;
+  max-width: 380px;
+  background: #12131c;
   border: 1px solid var(--border);
   border-radius: 6px;
   color: var(--text);
   font-family: var(--mono);
-  font-size: 13px;
-  padding: 7px 12px;
+  font-size: 14px;
+  padding: 10px 14px;
   outline: none;
   transition: border-color .15s;
+  text-align: center;
 }
-.name-row input:focus { border-color: var(--amber); }
+.splash input[type="text"]:focus { border-color: var(--amber); }
+.btn-begin {
+  background: var(--amber);
+  color: #16171f;
+  border: none;
+  border-radius: 6px;
+  font-family: var(--mono);
+  font-size: 15px;
+  font-weight: 700;
+  padding: 11px 36px;
+  cursor: pointer;
+  transition: opacity .15s;
+}
+.btn-begin:hover    { opacity: .88; }
+.btn-begin:disabled { opacity: .4; cursor: default; }
+.splash-err {
+  font-size: 12px;
+  color: var(--red);
+  min-height: 16px;
+}
 
+/* ── quiz header ── */
+.quiz-header { margin-bottom: 24px; }
+.quiz-header h1 { font-size: 17px; font-weight: 600; color: var(--amber); margin-bottom: 2px; }
+.quiz-header p  { color: var(--muted); font-size: 12.5px; }
+
+/* ── pregunta ── */
 .question {
   background: var(--panel-2);
   border: 1px solid var(--border);
@@ -120,117 +123,58 @@ body {
   padding: 18px 20px 20px;
   margin-bottom: 18px;
 }
-
 .q-num {
-  font-size: 11px;
-  color: var(--muted);
-  margin-bottom: 4px;
-  text-transform: uppercase;
-  letter-spacing: .06em;
+  font-size: 11px; color: var(--muted); margin-bottom: 4px;
+  text-transform: uppercase; letter-spacing: .06em;
 }
-
 .qtype {
-  display: inline-block;
-  font-size: 11px;
-  background: var(--amber-dim);
-  color: var(--amber);
-  border: 1px solid var(--amber);
-  border-radius: 4px;
-  padding: 1px 7px;
-  margin-bottom: 10px;
-  text-transform: uppercase;
-  letter-spacing: .05em;
+  display: inline-block; font-size: 11px;
+  background: var(--amber-dim); color: var(--amber); border: 1px solid var(--amber);
+  border-radius: 4px; padding: 1px 7px; margin-bottom: 10px;
+  text-transform: uppercase; letter-spacing: .05em;
 }
 .qtype-open { background: var(--green-dim); color: var(--green); border-color: var(--green); }
+.q-text { font-size: 14px; margin-bottom: 12px; color: var(--text); line-height: 1.55; }
 
-.q-text {
-  font-size: 14px;
-  margin-bottom: 12px;
-  color: var(--text);
-  line-height: 1.55;
-}
-
-/* code blocks */
+/* ── bloque de código ── */
 .code-block {
+  display: block;
   font-family: var(--mono);
   background: #12131c;
   border: 1px solid var(--border);
   border-radius: 6px;
   padding: 12px 14px;
   margin: 10px 0 14px;
-  font-size: 13.5px;
+  font-size: 13px;
   overflow-x: auto;
-  white-space: pre;
+  white-space: pre-wrap;   /* preserva espacios/indentación, permite scroll */
   color: #c9cbe0;
-  line-height: 1.6;
+  line-height: 2;          /* espacio generoso para que los inputs no se superpongan */
 }
-
-/* blank-type code blocks: line-by-line layout to avoid overlap with inputs */
-.code-block-blank {
-  white-space: normal;
-  display: flex;
-  flex-direction: column;
-  gap: 0;
-}
-
-.code-line {
-  display: flex;
-  align-items: center;
-  flex-wrap: wrap;
-  gap: 4px;
-  min-height: 26px;
-  white-space: pre-wrap;
-  font-family: var(--mono);
-}
-
 .code-block .kw   { color: #c792ea; }
 .code-block .type { color: #82aaff; }
 .code-block .fn   { color: #82aaff; }
 .code-block .str  { color: #c3e88d; }
 
-/* blank inputs inside code blocks */
+/* inputs dentro del bloque de código (preguntas de completar) */
 .code-block input[type="text"] {
+  display: inline-block;
+  vertical-align: middle;
   background: var(--panel);
   border: 1px solid var(--amber);
   border-radius: 4px;
   color: var(--amber);
   font-family: var(--mono);
-  font-size: 13px;
-  padding: 2px 8px;
+  font-size: 12.5px;
+  padding: 0 8px;
+  height: 24px;
   width: 130px;
   outline: none;
-  flex-shrink: 0;
+  white-space: normal;
 }
-.code-block input[type="text"]:focus {
-  background: var(--amber-dim);
-}
+.code-block input[type="text"]:focus { background: var(--amber-dim); }
 
-/* blank row (standalone blanks) */
-.blank-row {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  flex-wrap: wrap;
-  background: #12131c;
-  border: 1px solid var(--border);
-  border-radius: 6px;
-  padding: 10px 14px;
-  font-size: 13.5px;
-}
-.blank-row input[type="text"] {
-  background: var(--panel);
-  border: 1px solid var(--amber);
-  border-radius: 4px;
-  color: var(--amber);
-  font-family: var(--mono);
-  font-size: 13px;
-  padding: 2px 8px;
-  width: 130px;
-  outline: none;
-}
-.blank-row input[type="text"]:focus { background: var(--amber-dim); }
-
-/* open textarea */
+/* ── respuesta abierta ── */
 .open-answer {
   width: 100%;
   background: var(--panel-2);
@@ -247,31 +191,23 @@ body {
 }
 .open-answer:focus { border-color: var(--amber); }
 
-/* single / tf options */
+/* ── opciones ── */
 .options { display: flex; flex-direction: column; gap: 8px; }
-
 .option {
-  display: flex;
-  align-items: flex-start;
-  gap: 10px;
-  background: var(--panel);
-  border: 1px solid var(--border);
-  border-radius: 6px;
-  padding: 10px 14px;
-  cursor: pointer;
+  display: flex; align-items: flex-start; gap: 10px;
+  background: var(--panel); border: 1px solid var(--border); border-radius: 6px;
+  padding: 10px 14px; cursor: pointer;
   transition: border-color .12s, background .12s;
   user-select: none;
 }
-.option:hover { border-color: var(--amber); }
+.option:hover    { border-color: var(--amber); }
 .option.selected { border-color: var(--amber); background: var(--amber-dim); }
-.option.locked { pointer-events: none; opacity: .75; }
-
+.option.locked   { pointer-events: none; opacity: .75; }
 .option input[type="radio"] { display: none; }
 .option-label { font-size: 13.5px; color: var(--text); line-height: 1.5; }
-
 .tf-row { display: flex; gap: 10px; }
 
-/* footer / submit */
+/* ── footer / enviar ── */
 .quiz-footer {
   margin-top: 28px;
   display: flex;
@@ -279,61 +215,22 @@ body {
   align-items: flex-end;
   gap: 10px;
 }
-
-.status-msg {
-  font-size: 12px;
-  color: var(--muted);
-  align-self: flex-start;
-}
-.status-msg.warn  { color: var(--amber); }
-.status-msg.error { color: var(--red); }
-.status-msg.ok    { color: var(--green); }
-
+.status-msg            { font-size: 12px; color: var(--muted); align-self: flex-start; }
+.status-msg.warn       { color: var(--amber); }
+.status-msg.error      { color: var(--red); }
+.status-msg.ok         { color: var(--green); }
 .btn-submit {
-  background: var(--amber);
-  color: #16171f;
-  border: none;
-  border-radius: 6px;
-  font-family: var(--mono);
-  font-size: 14px;
-  font-weight: 600;
-  padding: 10px 26px;
-  cursor: pointer;
-  transition: opacity .15s;
+  background: var(--amber); color: #16171f; border: none; border-radius: 6px;
+  font-family: var(--mono); font-size: 14px; font-weight: 600;
+  padding: 10px 26px; cursor: pointer; transition: opacity .15s;
 }
-.btn-submit:hover   { opacity: .88; }
-.btn-submit:disabled{ opacity: .4; cursor: default; }
+.btn-submit:hover    { opacity: .88; }
+.btn-submit:disabled { opacity: .4; cursor: default; }
 
-/* thanks screen */
-.thanks {
-  text-align: center;
-  padding: 48px 24px;
-}
+/* ── pantalla de gracias ── */
+.thanks { text-align: center; padding: 48px 24px; }
 .thanks h2 { color: var(--green); font-size: 22px; margin-bottom: 8px; }
 .thanks p  { color: var(--muted); font-size: 14px; }
-
-/* fullscreen warning overlay */
-#fs-warning {
-  display: none;
-  position: fixed;
-  inset: 0;
-  background: #0d0e14ee;
-  z-index: 9999;
-  align-items: center;
-  justify-content: center;
-  flex-direction: column;
-  gap: 16px;
-  text-align: center;
-  padding: 24px;
-}
-#fs-warning.visible { display: flex; }
-#fs-warning h2 { color: var(--red); font-size: 20px; }
-#fs-warning p  { color: var(--muted); font-size: 14px; max-width: 480px; }
-#fs-warning button {
-  background: var(--amber); color: #16171f; border: none;
-  border-radius: 6px; font-family: var(--mono); font-size: 14px;
-  font-weight: 600; padding: 10px 24px; cursor: pointer;
-}
 
 @media (max-width: 520px) {
   body { padding: 0; }
@@ -344,12 +241,6 @@ body {
 </head>
 <body>
 
-<div id="fs-warning">
-  <h2>⚠ Saliste de pantalla completa</h2>
-  <p>El escrito debe realizarse en pantalla completa. Volvé a entrar en pantalla completa para continuar.</p>
-  <button onclick="requestFS()">Volver a pantalla completa</button>
-</div>
-
 <div class="window">
   <div class="titlebar">
     <span class="dot red"></span>
@@ -358,25 +249,22 @@ body {
     <span class="tab-title">Quiz_JSP.java</span>
     <span class="build-status" id="build-status">● en progreso</span>
   </div>
-  <div class="content" id="main-content">
-    <!-- rendered by JS -->
-  </div>
+  <div class="content" id="main-content"><!-- JS --></div>
 </div>
 
 <script>
-const SHEET_WEBAPP_URL = "https://script.google.com/macros/s/AKfycbyvMoAslMId9-Zaa-UVHue-ALHLyY8YLhP2-r6GivSZsZuwq4SfihWdz389bh3RGmxr/exec";
+// ⚠ REEMPLAZÁ esta URL por la tuya: Implementar → Administrar implementaciones → URL de App web
+const SHEET_WEBAPP_URL = "https://script.google.com/macros/s/AKfycbyvMoAsIMId9-Zaa-UVHue-ALHLyY8YLhP2-r6GivSZsZuwq4SfihWdz389bh3RGmxr/exec";
 const LS_KEY = "servletsJspSubmitted";
 
 /* ─── PREGUNTAS ─────────────────────────────────────────────────────────── */
 const questions = [
   {
-    id: "q1",
-    type: "open",
+    id: "q1", type: "open",
     text: "Escribe con tus palabras: ¿Qué es un Servlet?"
   },
   {
-    id: "q2",
-    type: "single",
+    id: "q2", type: "single",
     text: "¿Cuál es la función principal del archivo pom.xml en Apache Maven?",
     options: [
       { id: "a", label: "Funcionar como un servidor web para ejecutar Servlets y procesar peticiones HTTP." },
@@ -386,79 +274,46 @@ const questions = [
     ]
   },
   {
-    id: "q3",
-    type: "blank",
+    id: "q3", type: "blank",
     text: "Completar el siguiente formulario HTML para el cálculo de sueldo de empleados.",
-    code: `&lt;form action="__BLANK0__" method="__BLANK1__"&gt;
-    &lt;!-- Título del formulario --&gt;
-    &lt;h2&gt;Calculo de Sueldo Empleados&lt;/h2&gt;
-    &lt;br&gt;
-    &lt;label&gt;Nombre:
-        &lt;input type="__BLANK2__" name="__BLANK3__" /&gt;
-    &lt;/label&gt;
-    &lt;br&gt;
-    &lt;label&gt;Sueldo por Día:
-        &lt;input type="__BLANK4__" name="__BLANK5__" /&gt;
-    &lt;/label&gt;
-    &lt;br&gt;
-    &lt;label&gt;Días Trabajados:
-        &lt;input type="__BLANK6__" name="__BLANK7__" /&gt;
-    &lt;/label&gt;
-    &lt;br&gt;
-    &lt;button type="__BLANK8__"&gt;Calculo de Sueldo&lt;/button&gt;
-&lt;/form&gt;`,
+    code: `&lt;form action="__BLANK0__" method="__BLANK1__"&gt;\n    &lt;!-- Título del formulario --&gt;\n    &lt;h2&gt;Calculo de Sueldo Empleados&lt;/h2&gt;\n    &lt;br&gt;\n    &lt;label&gt;Nombre:\n        &lt;input type="__BLANK2__" name="__BLANK3__" /&gt;\n    &lt;/label&gt;\n    &lt;br&gt;\n    &lt;label&gt;Sueldo por Día:\n        &lt;input type="__BLANK4__" name="__BLANK5__" /&gt;\n    &lt;/label&gt;\n    &lt;br&gt;\n    &lt;label&gt;Días Trabajados:\n        &lt;input type="__BLANK6__" name="__BLANK7__" /&gt;\n    &lt;/label&gt;\n    &lt;br&gt;\n    &lt;button type="__BLANK8__"&gt;Calculo de Sueldo&lt;/button&gt;\n&lt;/form&gt;`,
     blanks: 9
   },
   {
-    id: "q4",
-    type: "tf",
+    id: "q4", type: "tf",
     text: "Indicar si el siguiente código, al cumplirse la condición (por ejemplo con ?ok=1 en la URL), muestra en pantalla el mensaje de confirmación. Verdadero o falso.",
-    code: `&lt;c:if test=&quot;\${param.ok == '1'}&quot;&gt;
-    &lt;p class=&quot;ok&quot;&gt;Producto agregado correctamente.&lt;/p&gt;
-&lt;/c:if&gt;`
+    code: `&lt;c:if test=&quot;\${param.ok == '1'}&quot;&gt;\n    &lt;p class=&quot;ok&quot;&gt;Producto agregado correctamente.&lt;/p&gt;\n&lt;/c:if&gt;`
   },
   {
-    id: "q5",
-    type: "blank",
+    id: "q5", type: "blank",
     text: 'Completar el método doPost para capturar el dato "nombre" enviado desde el cliente.',
-    code: `<span class="kw">@Override</span>
-<span class="kw">protected</span> <span class="type">void</span> <span class="fn">doPost</span>(HttpServletRequest request, HttpServletResponse response)
-        <span class="kw">throws</span> ServletException, IOException {
-    String nombre = request.__BLANK0__(<span class="str">"nombre"</span>);`,
+    code: `<span class="kw">@Override</span>\n<span class="kw">protected</span> <span class="type">void</span> <span class="fn">doPost</span>(HttpServletRequest request, HttpServletResponse response)\n        <span class="kw">throws</span> ServletException, IOException {\n    String nombre = request.__BLANK0__(<span class="str">"nombre"</span>);`,
     blanks: 1
   },
   {
-    id: "q6",
-    type: "blank",
+    id: "q6", type: "blank",
     text: 'Completar para guardar el dato capturado en el request, de forma que pueda ser enviado a la Vista (JSP).',
     code: `request.__BLANK0__(&quot;__BLANK1__&quot;, __BLANK2__);`,
     blanks: 3
   },
   {
-    id: "q7",
-    type: "blank",
+    id: "q7", type: "blank",
     text: 'Completar el procedimiento para enviar el "paquete" con los datos a la página JSP (Vista).',
     code: `request.__BLANK0__(&quot;resultado.jsp&quot;).__BLANK1__(request, response);`,
     blanks: 2
   },
   {
-    id: "q8",
-    type: "tf",
+    id: "q8", type: "tf",
     text: "Indicar si el siguiente código genera una nueva sesión HTTP. Verdadero o falso.",
     code: `HttpSession sesion = request.setSession();`
   },
   {
-    id: "q9",
-    type: "open",
+    id: "q9", type: "open",
     text: "Explicar qué hace el siguiente código.",
-    code: `<span class="kw">if</span> (carrito == <span class="kw">null</span>) {
-    carrito = <span class="kw">new</span> ArrayList&lt;&gt;();
-    sesion.setAttribute(<span class="str">"carrito"</span>, carrito);
-}`
+    code: `<span class="kw">if</span> (carrito == <span class="kw">null</span>) {\n    carrito = <span class="kw">new</span> ArrayList&lt;&gt;();\n    sesion.setAttribute(<span class="str">"carrito"</span>, carrito);\n}`
   },
   {
-    id: "q10",
-    type: "single",
+    id: "q10", type: "single",
     text: "Completar (elegir la opción correcta):",
     code: `String user = request._________(&quot;usuario&quot;);`,
     options: [
@@ -469,85 +324,101 @@ const questions = [
     ]
   },
   {
-    id: "q11",
-    type: "tf",
+    id: "q11", type: "tf",
     text: "¿Cuando hacemos clic en un enlace o hipervínculo, estamos utilizando de forma implícita un método GET? Verdadero o falso."
   }
 ];
 
-/* ─── STATE ─────────────────────────────────────────────────────────────── */
-const state = {};          // { q1: "...", q2: "b", q3_0: "...", ... }
-let locked = false;
-let quizFinished = false;
-let fsActive = false;
+/* ─── ESTADO ─────────────────────────────────────────────────────────────── */
+const state   = {};
+let locked    = false;
+let quizFinished  = false;
+let quizStarted   = false;   // true después de pasar la pantalla de inicio
 let alreadySubmitted = false;
-let studentNameGlobal = "";
+let studentName = "";
 
 const typeLabels = {
-  single: "opción única",
-  tf:     "verdadero / falso",
-  blank:  "completar",
-  open:   "pregunta abierta"
+  single: "opción única", tf: "verdadero / falso",
+  blank: "completar",     open: "pregunta abierta"
 };
 
-/* ─── RENDER ────────────────────────────────────────────────────────────── */
-function render() {
-  const content = document.getElementById("main-content");
+/* ─── SHUFFLE ────────────────────────────────────────────────────────────── */
+function shuffle(arr) {
+  for (let i = arr.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [arr[i], arr[j]] = [arr[j], arr[i]];
+  }
+}
+shuffle(questions);
 
-  // check already submitted
-  try {
-    if (localStorage.getItem(LS_KEY) === "1") {
-      alreadySubmitted = true;
-      renderThanks();
-      return;
-    }
-  } catch(e) {}
+/* ─── PANTALLA DE INICIO ─────────────────────────────────────────────────── */
+function renderSplash() {
+  document.getElementById("main-content").innerHTML = `
+    <div class="splash">
+      <h1>Quiz_JSP.java</h1>
+      <p>Escribir nombre y apellido para comenzar. El cuestionario se abre en
+         pantalla completa; si se sale de pantalla completa antes de terminar,
+         se envía automáticamente con lo que esté respondido hasta ese momento.</p>
+      <input type="text" id="splash-name" placeholder="Nombre y apellido"
+             autocomplete="off" spellcheck="false" />
+      <div class="splash-err" id="splash-err"></div>
+      <button class="btn-begin" id="btn-begin" onclick="beginQuiz()">Comenzar</button>
+    </div>`;
 
+  // Enter también inicia
+  document.getElementById("splash-name").addEventListener("keydown", e => {
+    if (e.key === "Enter") beginQuiz();
+  });
+}
+
+function beginQuiz() {
+  const nameEl = document.getElementById("splash-name");
+  const name   = nameEl ? nameEl.value.trim() : "";
+  if (!name) {
+    document.getElementById("splash-err").textContent = "⚠ Ingresá tu nombre antes de comenzar.";
+    nameEl.focus();
+    return;
+  }
+  studentName  = name;
+  quizStarted  = true;
+  requestFS();
+  renderQuiz();
+}
+
+/* ─── QUIZ ───────────────────────────────────────────────────────────────── */
+function renderQuiz() {
   let html = `
     <div class="quiz-header">
       <h1>// Servlets &amp; JSP — Escrito</h1>
-      <p>Respondé todas las preguntas y enviá antes de que termine el tiempo.</p>
-    </div>
-    <div class="name-row">
-      <label for="student-name">Nombre completo:</label>
-      <input type="text" id="student-name" placeholder="Tu nombre y apellido" autocomplete="off" />
+      <p>Respondé lo que sabés y enviá cuando estés listo/a. Las preguntas sin
+         responder quedan en blanco.</p>
     </div>`;
 
   questions.forEach((q, i) => {
-    const isOpen = q.type === "open";
-    const typeLabel = typeLabels[q.type] || q.type;
+    const isOpen     = q.type === "open";
     const qtypeClass = isOpen ? "qtype qtype-open" : "qtype";
-
     html += `<div class="question" id="wrap-${q.id}">
       <div class="q-num">Pregunta ${i + 1} de ${questions.length}</div>
-      <div class="${qtypeClass}">${typeLabel}</div>
+      <div class="${qtypeClass}">${typeLabels[q.type]}</div>
       <div class="q-text">${q.text}</div>`;
 
-    // optional code block
+    // bloque de código con white-space:pre-wrap — sin divs intermedios
     if (q.code) {
+      let codeHtml = q.code;
       if (q.type === "blank") {
-        // replace __BLANKn__ with inputs
-        let codeHtml = q.code;
         for (let b = 0; b < q.blanks; b++) {
           codeHtml = codeHtml.replace(
             `__BLANK${b}__`,
-            `<input type="text" data-qid="${q.id}" data-blank="${b}" placeholder="?" autocomplete="off" />`
+            `<input type="text" data-qid="${q.id}" data-blank="${b}" placeholder="?" autocomplete="off" spellcheck="false" />`
           );
         }
-        // render line by line so inputs don't overlap with pre-formatted text
-        const lines = codeHtml.split('\n');
-        const linesHtml = lines.map(line =>
-          `<div class="code-line">${line === '' ? '&ZeroWidthSpace;' : line}</div>`
-        ).join('');
-        html += `<code class="code-block code-block-blank">${linesHtml}</code>`;
-      } else {
-        html += `<code class="code-block">${q.code}</code>`;
       }
+      html += `<code class="code-block">${codeHtml}</code>`;
     }
 
-    // answer area
     if (q.type === "open") {
-      html += `<textarea class="open-answer" data-qid="${q.id}" placeholder="Escribí tu respuesta acá..." rows="4"></textarea>`;
+      html += `<textarea class="open-answer" data-qid="${q.id}"
+                 placeholder="Escribí tu respuesta acá..." rows="4"></textarea>`;
     } else if (q.type === "single") {
       html += `<div class="options">`;
       q.options.forEach(opt => {
@@ -569,225 +440,152 @@ function render() {
         </label>
       </div>`;
     }
-
-    html += `</div>`; // .question
+    html += `</div>`;
   });
 
-  html += `
-    <div class="quiz-footer">
-      <div class="status-msg" id="status-msg"></div>
-      <button class="btn-submit" id="btn-submit" onclick="handleSubmit()">Enviar respuestas →</button>
-    </div>`;
+  html += `<div class="quiz-footer">
+    <div class="status-msg" id="status-msg"></div>
+    <button class="btn-submit" id="btn-submit" onclick="handleSubmit()">Enviar respuestas →</button>
+  </div>`;
 
-  content.innerHTML = html;
+  document.getElementById("main-content").innerHTML = html;
   attachListeners();
 }
 
 function attachListeners() {
-  // open textareas
   document.querySelectorAll(".open-answer").forEach(ta => {
-    ta.addEventListener("input", () => {
-      state[ta.dataset.qid] = ta.value;
-      updateStatus();
-    });
+    ta.addEventListener("input", () => { state[ta.dataset.qid] = ta.value; });
   });
-
-  // option labels (single / tf)
   document.querySelectorAll(".option").forEach(lbl => {
     lbl.addEventListener("click", () => {
       if (locked) return;
-      const qid = lbl.dataset.qid;
-      const val = lbl.dataset.val;
-      state[qid] = val;
-      updateOptionStyles(qid);
-      updateStatus();
+      state[lbl.dataset.qid] = lbl.dataset.val;
+      document.querySelectorAll(`.option[data-qid="${lbl.dataset.qid}"]`).forEach(l =>
+        l.classList.toggle("selected", l.dataset.val === lbl.dataset.val)
+      );
     });
   });
-
-  // blank inputs
   document.querySelectorAll("[data-blank]").forEach(inp => {
     inp.addEventListener("input", () => {
-      const key = `${inp.dataset.qid}_${inp.dataset.blank}`;
-      state[key] = inp.value;
-      updateStatus();
+      state[`${inp.dataset.qid}_${inp.dataset.blank}`] = inp.value;
     });
   });
-
-  // name field
-  const nameEl = document.getElementById("student-name");
-  if (nameEl) {
-    nameEl.addEventListener("input", () => {
-      studentNameGlobal = nameEl.value.trim();
-      updateStatus();
-    });
-  }
 }
 
-function updateOptionStyles(qid) {
-  document.querySelectorAll(`.option[data-qid="${qid}"]`).forEach(lbl => {
-    lbl.classList.toggle("selected", lbl.dataset.val === state[qid]);
-  });
-}
-
-function isAnswered(q) {
-  if (q.type === "open") return (state[q.id] || "").trim().length > 0;
-  if (q.type === "single" || q.type === "tf") return !!state[q.id];
-  if (q.type === "blank") {
-    for (let b = 0; b < q.blanks; b++) {
-      if (!(state[`${q.id}_${b}`] || "").trim()) return false;
-    }
-    return true;
-  }
-  return false;
-}
-
-function getStudentName() {
-  const el = document.getElementById("student-name");
-  return el ? el.value.trim() : studentNameGlobal;
-}
-
-function updateStatus() {
-  const unanswered = questions.filter(q => !isAnswered(q)).length;
-  const msg = document.getElementById("status-msg");
-  if (!msg) return;
-  if (unanswered === 0) {
-    msg.textContent = "✓ Todas las preguntas respondidas";
-    msg.className = "status-msg ok";
-  } else {
-    msg.textContent = `${unanswered} pregunta${unanswered !== 1 ? "s" : ""} sin responder`;
-    msg.className = "status-msg warn";
-  }
-}
-
-/* ─── SUBMIT ────────────────────────────────────────────────────────────── */
-function buildAnswerPayload() {
-  const name = getStudentName();
+/* ─── SUBMIT ─────────────────────────────────────────────────────────────── */
+function buildPayload() {
   const answers = {};
-
   questions.forEach(q => {
     if (q.type === "blank") {
       const parts = [];
-      for (let b = 0; b < q.blanks; b++) {
-        parts.push(state[`${q.id}_${b}`] || "");
-      }
+      for (let b = 0; b < q.blanks; b++) parts.push(state[`${q.id}_${b}`] || "");
       answers[q.id] = parts.join(" | ");
     } else {
       answers[q.id] = state[q.id] || "";
     }
   });
-
-  return { nombre: name, ...answers, timestamp: new Date().toISOString() };
+  return { nombre: studentName, ...answers, timestamp: new Date().toISOString() };
 }
 
-function showSendError(msg) {
-  const el = document.getElementById("status-msg");
-  if (el) { el.textContent = "⚠ " + msg; el.className = "status-msg error"; }
-  const btn = document.getElementById("btn-submit");
-  if (btn) { btn.disabled = false; btn.textContent = "Reintentar envío"; }
-}
-
-function lockAllInputs() {
+function lockAll() {
   locked = true;
   document.querySelectorAll("textarea, input").forEach(el => el.disabled = true);
   document.querySelectorAll(".option").forEach(el => el.classList.add("locked"));
 }
 
 function renderThanks() {
-  const content = document.getElementById("main-content");
-  content.innerHTML = `
+  document.getElementById("main-content").innerHTML = `
     <div class="thanks">
       <h2>✓ Escrito enviado</h2>
       <p>Tus respuestas fueron registradas correctamente.<br>Podés cerrar esta ventana.</p>
     </div>`;
-  document.getElementById("build-status").textContent = "● enviado";
-  document.getElementById("build-status").className = "build-status ok";
-  quizFinished = true;
+  const bs = document.getElementById("build-status");
+  bs.textContent = "● enviado";
+  bs.className   = "build-status ok";
+  quizFinished   = true;
 }
 
 function performSubmit(payload) {
+  quizFinished = true;   // evitar doble disparo de fullscreen
+  lockAll();
+
   const btn = document.getElementById("btn-submit");
   if (btn) { btn.disabled = true; btn.textContent = "Enviando…"; }
-
   const msg = document.getElementById("status-msg");
   if (msg) { msg.textContent = "Enviando respuestas…"; msg.className = "status-msg"; }
 
+  // mode:"no-cors" es necesario cuando el archivo se abre localmente (file://)
+  // La respuesta será opaca pero el request SÍ llega al servidor de Google
   fetch(SHEET_WEBAPP_URL, {
     method: "POST",
+    mode: "no-cors",
     headers: { "Content-Type": "text/plain" },
     body: JSON.stringify(payload)
   })
-  .then(r => r.text())
-  .then(text => {
+  .then(() => {
+    // Con no-cors el .then() se ejecuta cuando el request fue enviado
     try { localStorage.setItem(LS_KEY, "1"); } catch(e) {}
-    lockAllInputs();
     renderThanks();
   })
   .catch(err => {
-    showSendError("No se pudo enviar. Revisá tu conexión e intentá de nuevo.");
+    // Solo llega aquí si hay error de red real (sin conexión, URL mal formada)
+    quizFinished = false;
+    locked = false;
+    document.querySelectorAll("textarea, input").forEach(el => el.disabled = false);
+    document.querySelectorAll(".option").forEach(el => el.classList.remove("locked"));
+    const btn2 = document.getElementById("btn-submit");
+    if (btn2) { btn2.disabled = false; btn2.textContent = "Reintentar envío"; }
+    const msg2 = document.getElementById("status-msg");
+    if (msg2) {
+      msg2.textContent = "⚠ No se pudo enviar. Verificá la URL del script y la conexión a internet.";
+      msg2.className = "status-msg error";
+    }
   });
 }
 
 function handleSubmit() {
   if (locked || quizFinished) return;
-
-  const name = getStudentName();
-  if (!name) {
-    const msg = document.getElementById("status-msg");
-    if (msg) { msg.textContent = "⚠ Ingresá tu nombre antes de enviar."; msg.className = "status-msg warn"; }
-    document.getElementById("student-name").focus();
-    return;
-  }
-
-  const unanswered = questions.filter(q => !isAnswered(q));
-  if (unanswered.length > 0) {
-    const msg = document.getElementById("status-msg");
-    if (msg) {
-      msg.textContent = `⚠ Faltan ${unanswered.length} respuesta${unanswered.length !== 1 ? "s" : ""} por completar.`;
-      msg.className = "status-msg warn";
-    }
-    const firstWrap = document.getElementById("wrap-" + unanswered[0].id);
-    if (firstWrap) firstWrap.scrollIntoView({ behavior: "smooth", block: "center" });
-    return;
-  }
-
-  performSubmit(buildAnswerPayload());
+  // No hay validación de respuestas obligatorias — se envía lo que esté
+  performSubmit(buildPayload());
 }
 
-/* ─── FULLSCREEN ────────────────────────────────────────────────────────── */
+/* ─── FULLSCREEN ─────────────────────────────────────────────────────────── */
 function isFullscreen() {
-  return !!(document.fullscreenElement || document.webkitFullscreenElement || document.mozFullScreenElement);
+  return !!(document.fullscreenElement
+          || document.webkitFullscreenElement
+          || document.mozFullScreenElement);
 }
 
 function requestFS() {
   const el = document.documentElement;
   const fn = el.requestFullscreen || el.webkitRequestFullscreen || el.mozRequestFullScreen;
-  if (fn) fn.call(el);
-  document.getElementById("fs-warning").classList.remove("visible");
+  if (fn) fn.call(el).catch(() => {});
 }
 
-function handleFsChange() {
-  if (quizFinished || alreadySubmitted) return;
+function onFsChange() {
+  // Solo actuar si el quiz ya empezó y no terminó
+  if (!quizStarted || quizFinished || alreadySubmitted) return;
   if (!isFullscreen()) {
-    fsActive = false;
-    document.getElementById("fs-warning").classList.add("visible");
-  } else {
-    fsActive = true;
-    document.getElementById("fs-warning").classList.remove("visible");
+    // El estudiante salió de pantalla completa → enviar inmediatamente
+    performSubmit(buildPayload());
   }
 }
 
-document.addEventListener("fullscreenchange",       handleFsChange);
-document.addEventListener("webkitfullscreenchange", handleFsChange);
-document.addEventListener("mozfullscreenchange",    handleFsChange);
+document.addEventListener("fullscreenchange",       onFsChange);
+document.addEventListener("webkitfullscreenchange", onFsChange);
+document.addEventListener("mozfullscreenchange",    onFsChange);
 
-/* ─── INIT ──────────────────────────────────────────────────────────────── */
-render();
-
-// request fullscreen on first interaction
-document.addEventListener("click", function initFS() {
-  if (!isFullscreen() && !quizFinished && !alreadySubmitted) requestFS();
-  document.removeEventListener("click", initFS);
-}, { once: true });
+/* ─── INIT ───────────────────────────────────────────────────────────────── */
+try {
+  if (localStorage.getItem(LS_KEY) === "1") {
+    alreadySubmitted = true;
+    renderThanks();
+  } else {
+    renderSplash();
+  }
+} catch(e) {
+  renderSplash();
+}
 </script>
 </body>
 </html>
